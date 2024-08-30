@@ -205,15 +205,21 @@ public class InAppWebViewManager extends ChannelDelegateImpl {
   @Override
   public void dispose() {
     super.dispose();
-    Collection<FlutterWebView> flutterWebViews = keepAliveWebViews.values();
-    for (FlutterWebView flutterWebView : flutterWebViews) {
-      String keepAliveId = flutterWebView.keepAliveId;
-      if (keepAliveId != null) {
-        disposeKeepAlive(flutterWebView.keepAliveId);
+    try{
+      Collection<FlutterWebView> flutterWebViews = keepAliveWebViews.values();
+      for (FlutterWebView flutterWebView : flutterWebViews) {
+        if(flutterWebView != null){
+          String keepAliveId = flutterWebView.keepAliveId;
+          if (keepAliveId != null) {
+            disposeKeepAlive(keepAliveId);
+          }
+        }
       }
+      keepAliveWebViews.clear();
+      windowWebViewMessages.clear();
+      plugin = null;
+    }catch (Exception e){
+
     }
-    keepAliveWebViews.clear();
-    windowWebViewMessages.clear();
-    plugin = null;
   }
 }
