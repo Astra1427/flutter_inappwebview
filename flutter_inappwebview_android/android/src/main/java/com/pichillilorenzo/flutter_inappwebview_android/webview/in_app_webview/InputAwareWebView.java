@@ -5,11 +5,13 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Context;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Looper;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ListPopupWindow;
 
 import androidx.annotation.Nullable;
@@ -92,6 +94,31 @@ public class InputAwareWebView extends WebView {
       return;
     }
     resetInputConnection();
+    destroyWebView();
+  }
+
+
+  void destroyWebView() {
+    if (Looper.myLooper() != Looper.getMainLooper()) return;
+    stopLoading();
+    loadUrl("about:blank");
+    if (getHandler() != null) {
+      getHandler().removeCallbacksAndMessages(null);
+    }
+    removeAllViews();
+    setWebChromeClient(null);
+    setWebViewClient(new WebViewClient());
+    setTag(null);
+    clearCache(true);
+    clearFormData();
+    clearMatches();
+    clearSslPreferences();
+    clearDisappearingChildren();
+    clearHistory();
+    clearView();
+    clearAnimation();
+    freeMemory();
+    destroy();
   }
 
   /**
