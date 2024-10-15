@@ -98,7 +98,7 @@ public class InputAwareWebView extends WebView {
   }
 
 
-  void destroyWebView() {
+  private void destroyWebView() {
     if (Looper.myLooper() != Looper.getMainLooper()) return;
     stopLoading();
     loadUrl("about:blank");
@@ -118,7 +118,6 @@ public class InputAwareWebView extends WebView {
     clearView();
     clearAnimation();
     freeMemory();
-    destroy();
   }
 
   /**
